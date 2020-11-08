@@ -130,7 +130,7 @@ void loop()
         }
     }
 
-    if ((pos > 22) && (pos < 26))
+    if ((pos == 18) || (pos == 38))
     {
         count_24++;
     }
@@ -141,17 +141,20 @@ void loop()
     if (count_sys >= 100)
     {
         count_sys = 0;
-        slack_senddata("{\"text\":\"Result: :apple:\",\"blocks\":[],\"attachments\":[{\"color\":\"#00FF00\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"A message *with some bold text* and _some italicized text_.\"}}]}]}");
         if (count_24 > 80)
         {
+            slack_senddata("{\"text\":\":door: Door phone is ringed\"}");
             M5.dis.drawpix(0, CRGB(128, 0, 0));
+            delay(1000);
         }
         else
         {
             M5.dis.drawpix(0, CRGB(0, 128, 0));
+            delay(1000);
         }
         count_24 = 0;
     }
+
     if (M5.Btn.wasPressed())
     {
         if (state)
