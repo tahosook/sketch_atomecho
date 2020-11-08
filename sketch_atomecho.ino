@@ -2,6 +2,7 @@
 #include <driver/i2s.h>
 
 #include "fft.h"
+#include "slack.h"
 
 #define CONFIG_I2S_BCK_PIN 19
 #define CONFIG_I2S_LRCK_PIN 33
@@ -85,6 +86,9 @@ void setup()
     } while (loop_play);
 
     InitI2SSpakerOrMic(MODE_MIC);
+
+    // Slack
+    slack_setup();
 }
 
 int8_t i2s_readraw_buff[1024];
@@ -137,6 +141,7 @@ void loop()
     if (count_sys >= 100)
     {
         count_sys = 0;
+        slack_senddata("Hello slack");
         if (count_24 > 80)
         {
             M5.dis.drawpix(0, CRGB(128, 0, 0));
