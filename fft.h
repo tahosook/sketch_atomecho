@@ -54,13 +54,13 @@ typedef enum
 
 typedef struct
 {
-  int size;  // FFT size
-  float *input;  // pointer to input buffer
-  float *output; // pointer to output buffer
-  float *twiddle_factors;  // pointer to buffer holding twiddle factors
-  fft_type_t type;   // real or complex
+  int size;                  // FFT size
+  float *input;              // pointer to input buffer
+  float *output;             // pointer to output buffer
+  float *twiddle_factors;    // pointer to buffer holding twiddle factors
+  fft_type_t type;           // real or complex
   fft_direction_t direction; // forward or backward
-  unsigned int flags; // FFT flags
+  unsigned int flags;        // FFT flags
 } fft_config_t;
 
 fft_config_t *fft_init(int size, fft_type_t type, fft_direction_t direction, float *input, float *output);
