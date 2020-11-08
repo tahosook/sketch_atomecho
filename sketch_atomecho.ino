@@ -141,7 +141,7 @@ void loop()
     if (count_sys >= 100)
     {
         count_sys = 0;
-        slack_senddata("Hello slack");
+        slack_senddata("{\"text\":\"Result: :apple:\",\"blocks\":[],\"attachments\":[{\"color\":\"#00FF00\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"A message *with some bold text* and _some italicized text_.\"}}]}]}");
         if (count_24 > 80)
         {
             M5.dis.drawpix(0, CRGB(128, 0, 0));
