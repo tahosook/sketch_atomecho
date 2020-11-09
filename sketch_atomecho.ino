@@ -130,7 +130,7 @@ void loop()
         }
     }
 
-    if (pos > 10 && pos == pre_pos)
+    if (pos > 10 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
     {
         count_24++;
     }
@@ -144,14 +144,14 @@ void loop()
         count_sys = 0;
         if (count_24 > 30)
         {
-            slack_senddata("{\"text\":\":door: Door phone is ringed: pos="+String(pre_pos)+" count="+String(count_24)+"\"}");
+            slack_senddata("{\"text\":\":door: Door phone is ringed: pos=" + String(pre_pos) + " count=" + String(count_24) + "\"}");
             M5.dis.drawpix(0, CRGB(128, 0, 0));
         }
         else
         {
             M5.dis.drawpix(0, CRGB(0, 128, 0));
         }
-            delay(1000);
+        delay(1000);
         count_24 = 0;
     }
 
