@@ -130,19 +130,19 @@ void loop()
         }
     }
 
-    if (pos > 10 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
+    if (pos > 1 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
     {
         count_24++;
     }
     Serial.printf("%d\n", pos);
     fft_destroy(real_fft_plan);
-    delay(10);
+    delay(20);
     pre_pos = pos;
     count_sys++;
-    if (count_sys >= 100)
+    if (count_sys >= 50)
     {
         count_sys = 0;
-        if (count_24 > 30)
+        if (count_24 > 15)
         {
             slack_senddata("{\"text\":\":door: Door phone is ringed: pos=" + String(pre_pos) + " count=" + String(count_24) + "\"}");
             M5.dis.drawpix(0, CRGB(128, 0, 0));
@@ -151,7 +151,6 @@ void loop()
         {
             M5.dis.drawpix(0, CRGB(0, 128, 0));
         }
-        delay(1000);
         count_24 = 0;
     }
 
