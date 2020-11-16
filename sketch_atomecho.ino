@@ -1,3 +1,4 @@
+
 #include "M5Atom.h"
 #include <driver/i2s.h>
 
@@ -143,7 +144,7 @@ void loop()
     DP.inc(pos);
     if (DP.isNeedCheck()) // データがたまったら
     {
-        Serial.printf(DP.dump()); // データダンプ
+        Serial.printf("%s\n",DP.dump()); // データダンプ
 
         if (DP.isNotice()) // 通知が必要なら
         {

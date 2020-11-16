@@ -50,7 +50,7 @@ const char *DoorPhoneObserver::dump()
     String buf;
     for (int i = 0; i < DATATYPE_COUNT; i++)
     {
-        if (data[i] != 0)
+        if (data[i] > 1 )
         {
             buf += String(i) + ":" + String(data[i]) + ",";
         }
