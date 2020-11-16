@@ -14,6 +14,10 @@
 #define MODE_MIC 0
 #define MODE_SPK 1
 
+const uint32_t DELAY_MSEC = 20;
+const uint32_t COUNT_SYS = 50;
+const uint32_t COUNT_24 = 50;
+
 extern const unsigned char audio[364808];
 
 bool InitI2SSpakerOrMic(int mode)
@@ -105,7 +109,7 @@ uint16_t count_sys = 0, count_24 = 0;
 
 void loop()
 {
-
+    // --- FFT
     fft_config_t *real_fft_plan = fft_init(512, FFT_REAL, FFT_FORWARD, NULL, NULL);
     i2s_read(I2S_NUM_0, (char *)i2s_readraw_buff, 1024, &bytesread, (100 / portTICK_RATE_MS));
     buffptr = (int16_t *)i2s_readraw_buff;
@@ -129,22 +133,26 @@ void loop()
             pos = count_n;
         }
     }
+    // Serial.printf("%d\n", pos);
+    fft_destroy(real_fft_plan);
+
+    // --- PICK SOUND
+    delay(DELAY_MSEC);
 
     if (pos > 1 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
     {
         count_24++;
     }
-    Serial.printf("%d\n", pos);
-    fft_destroy(real_fft_plan);
-    delay(20);
     pre_pos = pos;
     count_sys++;
-    if (count_sys >= 50)
+    if (count_sys >= COUNT_SYS)
     {
         count_sys = 0;
-        if (count_24 > 15)
+        if (count_24 > COUNT_24)
         {
-            slack_senddata("{\"text\":\":door: Door phone is ringed: pos=" + String(pre_pos) + " count=" + String(count_24) + "\"}");
+            char buf[140];
+            sprintf(buf, "{\"text\":\":door: Door phone is ringed: pos=%d count=%d\"}", pre_pos, count_24);
+            slack_senddata(buf);
             M5.dis.drawpix(0, CRGB(128, 0, 0));
         }
         else
@@ -154,6 +162,7 @@ void loop()
         count_24 = 0;
     }
 
+    // --- Button control
     if (M5.Btn.wasPressed())
     {
         if (state)
