@@ -14,9 +14,9 @@
 #define MODE_MIC 0
 #define MODE_SPK 1
 
-const uint32_t DELAY_MSEC = 20;
-const uint32_t COUNT_SYS = 50;
-const uint32_t COUNT_24 = 50;
+const uint32_t DELAY_MSEC = 20; // FFT結果の確認頻度(msec)
+const uint32_t COUNT_SYS = 50;  // FFT結果の取りまとめ数
+const uint32_t COUNT_24 = 15;   // 同じ音の数
 
 extern const unsigned char audio[364808];
 
@@ -104,8 +104,10 @@ uint16_t ydata;
 float adc_data;
 int16_t *buffptr;
 double redatabuff[512] = {0};
-uint16_t pos = 0, pre_pos = 0;
+uint16_t pos = 0;
+uint16_t pre_pos = 0;
 uint16_t count_sys = 0, count_24 = 0;
+uint16_t posdatabuff[128] = {0};
 
 void loop()
 {
@@ -133,21 +135,27 @@ void loop()
             pos = count_n;
         }
     }
-    // Serial.printf("%d\n", pos);
+    Serial.printf("pos=%d, maxData=%d\n", pos, maxData);
     fft_destroy(real_fft_plan);
 
     // --- PICK SOUND
     delay(DELAY_MSEC);
+
+    // if (posdatabuf[pos])
+    //     posdatabuf[pos]++;
+    count_sys++;
 
     if (pos > 1 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
     {
         count_24++;
     }
     pre_pos = pos;
-    count_sys++;
     if (count_sys >= COUNT_SYS)
     {
         count_sys = 0;
+        // for (int i = 0; i < sizeof(countdatabuf); i++)
+        // {
+        // }
         if (count_24 > COUNT_24)
         {
             char buf[140];
