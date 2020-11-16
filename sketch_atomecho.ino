@@ -3,6 +3,7 @@
 
 #include "fft.h"
 #include "slack.h"
+#include "doorphone.h"
 
 #define CONFIG_I2S_BCK_PIN 19
 #define CONFIG_I2S_LRCK_PIN 33
@@ -15,8 +16,6 @@
 #define MODE_SPK 1
 
 const uint32_t DELAY_MSEC = 20; // FFT結果の確認頻度(msec)
-const uint32_t COUNT_SYS = 50;  // FFT結果の取りまとめ数
-const uint32_t COUNT_24 = 15;   // 同じ音の数
 
 extern const unsigned char audio[364808];
 
@@ -93,6 +92,9 @@ void setup()
 
     // Slack
     slack_setup();
+
+    // Door phone Checker
+    DP.init();
 }
 
 int8_t i2s_readraw_buff[1024];
@@ -105,9 +107,6 @@ float adc_data;
 int16_t *buffptr;
 double redatabuff[512] = {0};
 uint16_t pos = 0;
-uint16_t pre_pos = 0;
-uint16_t count_sys = 0, count_24 = 0;
-uint16_t posdatabuff[128] = {0};
 
 void loop()
 {
@@ -135,39 +134,31 @@ void loop()
             pos = count_n;
         }
     }
-    Serial.printf("pos=%d, maxData=%d\n", pos, maxData);
+    // Serial.printf("pos=%d, maxData=%d\n", pos, maxData);
     fft_destroy(real_fft_plan);
 
     // --- PICK SOUND
     delay(DELAY_MSEC);
 
-    // if (posdatabuf[pos])
-    //     posdatabuf[pos]++;
-    count_sys++;
+    DP.inc(pos);
+    if (DP.isNeedCheck()) // データがたまったら
+    {
+        Serial.printf(DP.dump()); // データダンプ
 
-    if (pos > 1 && pos <= pre_pos + 1 && pos >= pre_pos - 1)
-    {
-        count_24++;
-    }
-    pre_pos = pos;
-    if (count_sys >= COUNT_SYS)
-    {
-        count_sys = 0;
-        // for (int i = 0; i < sizeof(countdatabuf); i++)
-        // {
-        // }
-        if (count_24 > COUNT_24)
+        if (DP.isNotice()) // 通知が必要なら
         {
             char buf[140];
-            sprintf(buf, "{\"text\":\":door: Door phone is ringed: pos=%d count=%d\"}", pre_pos, count_24);
+            sprintf(buf, "{\"text\":\":door: Door phone is ringed: data=%s\"}", DP.dump());
             slack_senddata(buf);
+
             M5.dis.drawpix(0, CRGB(128, 0, 0));
         }
         else
         {
             M5.dis.drawpix(0, CRGB(0, 128, 0));
         }
-        count_24 = 0;
+
+        DP.clear(); // データクリア
     }
 
     // --- Button control
