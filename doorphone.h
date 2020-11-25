@@ -1,7 +1,7 @@
 #ifndef _DOORPHONE_H_
 #define _DOORPHONE_H_
 
-#include <stdint.h>
+#include "WString.h"
 
 class DoorPhoneObserver
 {
@@ -26,7 +26,7 @@ public:
     bool isNeedCheck();
     bool isNotice();
 
-    const char *dump();
+    String dump();
     uint16_t numPos();
     uint16_t numCount();
 };

@@ -16,6 +16,8 @@
 #define MODE_MIC 0
 #define MODE_SPK 1
 
+#define DEBUG 0
+
 const uint32_t DELAY_MSEC = 20; // FFT結果の確認頻度(msec)
 
 extern const unsigned char audio[364808];
@@ -140,14 +142,17 @@ void loop()
 
     // --- PICK SOUND
     delay(DELAY_MSEC);
-
+    
+   // if(DEBUG) Serial.printf("DEBUG: %s(%d) DP.inc -> pos=%d\n",__FILE__,__LINE__,pos);
     DP.inc(pos);
     if (DP.isNeedCheck()) // データがたまったら
     {
-        Serial.printf("%s\n",DP.dump()); // データダンプ
+    if(DEBUG) Serial.printf("DEBUG: %s(%d) isNeedCheck\n",__FILE__,__LINE__);
+        Serial.printf("%s\n",DP.dump().c_str()); // データダンプ
 
         if (DP.isNotice()) // 通知が必要なら
         {
+    if(DEBUG) Serial.printf("DEBUG: %s(%d) isNotice\n",__FILE__,__LINE__);
             char buf[140];
             sprintf(buf, "{\"text\":\":door: Door phone is ringed: data=%s\"}", DP.dump());
             slack_senddata(buf);
@@ -159,9 +164,11 @@ void loop()
             M5.dis.drawpix(0, CRGB(0, 128, 0));
         }
 
+    if(DEBUG) Serial.printf("DEBUG: %s(%d) clear\n",__FILE__,__LINE__);
         DP.clear(); // データクリア
     }
-
+//if(DEBUG) Serial.printf("DEBUG: %s(%d) done\n",__FILE__,__LINE__);
+    
     // --- Button control
     if (M5.Btn.wasPressed())
     {
