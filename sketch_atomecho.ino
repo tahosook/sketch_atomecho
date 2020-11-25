@@ -144,12 +144,14 @@ void loop()
     DP.inc(pos);
     if (DP.isNeedCheck()) // データがたまったら
     {
-        Serial.printf("%s\n",DP.dump()); // データダンプ
+        String dump = DP.dump();
+        Serial.printf("%s\n", dump); // データダンプ
 
         if (DP.isNotice()) // 通知が必要なら
         {
-            char buf[140];
-            sprintf(buf, "{\"text\":\":door: Door phone is ringed: data=%s\"}", DP.dump());
+            String buf = "{\"text\":\":door: Door phone is ringed: data=";
+            buf.concat(dump);
+            buf.concat("\"}");
             slack_senddata(buf);
 
             M5.dis.drawpix(0, CRGB(128, 0, 0));

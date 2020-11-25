@@ -1,7 +1,5 @@
 #include "doorphone.h"
 
-#include "WString.h"
-
 DoorPhoneObserver::DoorPhoneObserver()
 {
 }
@@ -45,18 +43,20 @@ bool DoorPhoneObserver::isNotice()
     return false;
 }
 
-const char *DoorPhoneObserver::dump()
+String DoorPhoneObserver::dump()
 {
     String buf;
     for (int i = 0; i < DATATYPE_COUNT; i++)
     {
-        if (data[i] > 1 )
+        if (data[i] > 1)
         {
-            buf += String(i) + ":" + String(data[i]) + ",";
+            buf.concat(i);
+            buf.concat(":");
+            buf.concat(data[i]);
+            buf.concat(",");
         }
     }
-
-    return buf.c_str();
+    return buf;
 }
 
 uint16_t DoorPhoneObserver::numPos()
