@@ -56,6 +56,7 @@ String DoorPhoneObserver::dump()
             buf.concat(",");
         }
     }
+
     return buf;
 }
 
