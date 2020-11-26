@@ -16,8 +16,8 @@
 #define MODE_MIC 0
 #define MODE_SPK 1
 
-//#define DEBUG(fmt, ...) (void(0))
-#define DEBUG(fmt, ...) Serial.printf("DEBUG: %s(%d)" fmt "¥n", __FILE__, __LINE__, ##__VA_ARGS__)
+#define DEBUG(fmt, ...) (void(0))
+//#define DEBUG(fmt, ...) Serial.printf("DEBUG: %s(%d)" fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 
 const uint32_t DELAY_MSEC = 20; // FFT結果の確認頻度(msec)
 
@@ -144,7 +144,7 @@ void loop()
     // --- PICK SOUND
     delay(DELAY_MSEC);
 
-    DEBUG("DP.inc -> pos=%d", pos);
+    //DEBUG("DP.inc -> pos=%d", pos);
     DP.inc(pos);
     if (DP.isNeedCheck()) // データがたまったら
     {
@@ -169,7 +169,7 @@ void loop()
         DEBUG("clear");
         DP.clear(); // データクリア
     }
-    DEBUG("done");
+    //DEBUG("done");
 
     // --- Button control
     if (M5.Btn.wasPressed())
