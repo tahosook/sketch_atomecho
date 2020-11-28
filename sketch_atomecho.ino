@@ -19,7 +19,6 @@
 #define DEBUG(fmt, ...) (void(0))
 //#define DEBUG(fmt, ...) Serial.printf("DEBUG: %s(%d)" fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 
-const uint32_t DELAY_MSEC = 20; // FFT結果の確認頻度(msec)
 
 extern const unsigned char audio[364808];
 
@@ -142,7 +141,7 @@ void loop()
     fft_destroy(real_fft_plan);
 
     // --- PICK SOUND
-    delay(DELAY_MSEC);
+    delay(DP.getDelayMsec());
 
     //DEBUG("DP.inc -> pos=%d", pos);
     DP.inc(pos);

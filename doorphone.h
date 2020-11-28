@@ -6,8 +6,10 @@
 class DoorPhoneObserver
 {
 private:
-    const static uint32_t COUNT_MAX = 50;    // FFT結果の取りまとめ数
+    const static uint32_t COUNT_MAX = 100;    // FFT結果の取りまとめ数
     const static uint32_t COUNT_NOTICE = 15; // 同じ音の数
+    const static uint32_t DELAY_MSEC = 10; // FFT結果の確認頻度(msec)
+
     const static int DATATYPE_COUNT = 128;   // データの種類
 
     /* data */
@@ -29,6 +31,8 @@ public:
     String dump();
     uint16_t numPos();
     uint16_t numCount();
+
+    uint32_t getDelayMsec(){return DELAY_MSEC;}
 };
 
 extern DoorPhoneObserver DP;
