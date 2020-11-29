@@ -40,12 +40,22 @@ bool DoorPhoneObserver::isNeedCheck()
 
 bool DoorPhoneObserver::isNotice()
 {
-    return false;
+    int count = 0;
+    for (int i = 0; i < DATATYPE_COUNT; i++)
+    {
+        if (data[i] > 1)
+        {
+            count++;
+        }
+    }
+
+    return (count <= COUNT_NOTICE && data[1] < DATA_1_VALUE);
 }
 
 String DoorPhoneObserver::dump()
 {
     String buf;
+    int count = 0;
     for (int i = 0; i < DATATYPE_COUNT; i++)
     {
         if (data[i] > 1)
@@ -54,9 +64,11 @@ String DoorPhoneObserver::dump()
             buf.concat(":");
             buf.concat(data[i]);
             buf.concat(",");
+            count++;
         }
     }
 
+    buf.concat(count);
     return buf;
 }
 
