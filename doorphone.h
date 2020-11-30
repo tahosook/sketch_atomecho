@@ -16,6 +16,7 @@ private:
     /* data */
     uint16_t count = 0;
     uint16_t data[DATATYPE_COUNT] = {0};
+    double dataMax[DATATYPE_COUNT] = {0};
 
 public:
     DoorPhoneObserver(/* args */);
@@ -23,7 +24,7 @@ public:
 
     void init();
 
-    void inc(uint16_t pos);
+    void inc(uint16_t pos, double maxData);
     void clear();
 
     bool isNeedCheck();

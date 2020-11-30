@@ -18,7 +18,7 @@
 
 #define DEBUG(fmt, ...) (void(0))
 //#define DEBUG(fmt, ...) Serial.printf("DEBUG: %s(%d)" fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
-
+#define INFO(fmt, ...) Serial.printf("INFO:" fmt "\n", ##__VA_ARGS__)
 
 extern const unsigned char audio[364808];
 
@@ -143,12 +143,14 @@ void loop()
     // --- PICK SOUND
     delay(DP.getDelayMsec());
 
+    Serial.println(pos);
+
     //DEBUG("DP.inc -> pos=%d", pos);
-    DP.inc(pos);
+    DP.inc(pos, maxData);
     if (DP.isNeedCheck()) // データがたまったら
     {
         DEBUG("isNeedCheck");
-        Serial.printf("%s\n", DP.dump().c_str()); // データダンプ
+        INFO("%s", DP.dump().c_str()); // データダンプ
 
         if (DP.isNotice()) // 通知が必要なら
         {

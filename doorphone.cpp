@@ -13,7 +13,7 @@ void DoorPhoneObserver::init()
     clear();
 }
 
-void DoorPhoneObserver::inc(uint16_t pos)
+void DoorPhoneObserver::inc(uint16_t pos, double maxData)
 {
     if (pos <= 0 || pos > DATATYPE_COUNT - 1)
     {
@@ -21,6 +21,7 @@ void DoorPhoneObserver::inc(uint16_t pos)
     }
 
     data[pos]++;
+    dataMax[pos] = maxData;
     count++;
 }
 
